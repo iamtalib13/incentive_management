@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-01-04 10:39:17.432371",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "swayam_sevika_code",
+  "full_name",
+  "phone",
+  "city"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "swayam_sevika_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "SS Code",
+   "options": "Swayam Sevika Data"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "swayam_sevika_code.full_name",
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "swayam_sevika_code.emp_phone",
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Phone"
+  },
+  {
+   "columns": 2,
+   "fetch_from": "swayam_sevika_code.city",
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "City"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-04 13:57:02.644563",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "Swayam Sevika Records",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,340 @@
+{
+ "actions": [],
+ "autoname": "format:{ss_code}",
+ "creation": "2023-12-29 12:53:40.469087",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tab_break_3c2p",
+  "employee_id",
+  "emp_first_name",
+  "emp_last_name",
+  "designation",
+  "emp_phone",
+  "column_break_vxms",
+  "region",
+  "branch",
+  "division",
+  "department",
+  "tab_break_syul",
+  "entry_date",
+  "column_break_arne",
+  "status",
+  "section_break_bast",
+  "active",
+  "ss_code",
+  "column_break_evyp",
+  "section_break_byvv",
+  "first_name",
+  "middle_name",
+  "last_name",
+  "full_name",
+  "column_break_dzfy",
+  "date_of_birth",
+  "aadhar_number",
+  "pan_number",
+  "column_break_xlne",
+  "gender",
+  "phone",
+  "highest_education",
+  "section_break_bidd",
+  "present_address",
+  "city",
+  "column_break_dekt",
+  "address_check_same",
+  "permanent_address",
+  "section_break_zwvi",
+  "save_btn"
+ ],
+ "fields": [
+  {
+   "depends_on": "eval:frappe.user.has_role('System Manager')",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nPending From MIS\nApproved\nRejected",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "section_break_bast",
+   "fieldtype": "Section Break",
+   "label": "Swayam Sevika Details"
+  },
+  {
+   "fieldname": "ss_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SS Code",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_arne",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_byvv",
+   "fieldtype": "Section Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "middle_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Middle Name",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_dzfy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "aadhar_number",
+   "fieldtype": "Data",
+   "label": "Aadhar Number",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pan_number",
+   "fieldtype": "Data",
+   "label": "PAN Number",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\""
+  },
+  {
+   "fieldname": "column_break_xlne",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nMale\nFemale\nOther",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_bidd",
+   "fieldtype": "Section Break",
+   "label": "Address Details"
+  },
+  {
+   "fieldname": "present_address",
+   "fieldtype": "Small Text",
+   "label": "Present Address",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_dekt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "permanent_address",
+   "fieldtype": "Small Text",
+   "label": "Permanent Address",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\""
+  },
+  {
+   "fieldname": "highest_education",
+   "fieldtype": "Data",
+   "label": "Highest Education",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "address_check_same",
+   "fieldtype": "Check",
+   "label": "Is Permanent Address same as Present Address?",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\""
+  },
+  {
+   "fieldname": "tab_break_3c2p",
+   "fieldtype": "Tab Break",
+   "hidden": 1,
+   "label": "Employee Details"
+  },
+  {
+   "fieldname": "employee_id",
+   "fieldtype": "Data",
+   "label": "Employee ID"
+  },
+  {
+   "fetch_from": "employee_id.first_name",
+   "fieldname": "emp_first_name",
+   "fieldtype": "Data",
+   "label": "First Name"
+  },
+  {
+   "fetch_from": "employee_id.last_name",
+   "fieldname": "emp_last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "fetch_from": "employee_id.region",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Region"
+  },
+  {
+   "fetch_from": "employee_id.cell_number",
+   "fieldname": "emp_phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "column_break_vxms",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee_id.branch",
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Branch"
+  },
+  {
+   "fetch_from": "employee_id.division",
+   "fieldname": "division",
+   "fieldtype": "Data",
+   "label": "Division"
+  },
+  {
+   "fetch_from": "employee_id.designation",
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation"
+  },
+  {
+   "fieldname": "tab_break_syul",
+   "fieldtype": "Tab Break",
+   "label": "SS Data"
+  },
+  {
+   "fetch_from": "employee_id.department",
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department"
+  },
+  {
+   "default": "Today",
+   "fieldname": "entry_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_zwvi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('BDO & BDE') && (doc.status==\"Draft\" || doc.status==\"\") ",
+   "fieldname": "save_btn",
+   "fieldtype": "Button",
+   "label": "Save"
+  },
+  {
+   "fieldname": "column_break_evyp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City",
+   "read_only_depends_on": "eval:doc.status!==\"Draft\"",
+   "reqd": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_standard_filter": 1,
+   "label": "Active"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-08 17:14:55.484136",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "Swayam Sevika Data",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Orange",
+   "title": "Pending From MIS"
+  },
+  {
+   "color": "Blue",
+   "title": "Draft"
+  },
+  {
+   "color": "Green",
+   "title": "Approved"
+  },
+  {
+   "color": "Red",
+   "title": "Rejected"
+  }
+ ]
+}

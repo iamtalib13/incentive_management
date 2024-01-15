@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "autoname": "format:{employee_id}",
+ "creation": "2024-01-04 10:35:14.921556",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "bdo__bde_details_section",
+  "employee_id",
+  "employee_name",
+  "column_break_dmxp",
+  "branch",
+  "designation",
+  "region",
+  "my_swayam_sevika_section",
+  "swayam_sevika"
+ ],
+ "fields": [
+  {
+   "fieldname": "bdo__bde_details_section",
+   "fieldtype": "Section Break",
+   "label": "BDO / BDE Details"
+  },
+  {
+   "fieldname": "employee_id",
+   "fieldtype": "Link",
+   "label": "Employee ID",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee_id.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name"
+  },
+  {
+   "fieldname": "column_break_dmxp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee_id.branch",
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "label": "Branch"
+  },
+  {
+   "fetch_from": "employee_id.designation",
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation"
+  },
+  {
+   "fetch_from": "employee_id.region",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "label": "Region"
+  },
+  {
+   "fieldname": "my_swayam_sevika_section",
+   "fieldtype": "Section Break",
+   "label": "My Swayam Sevika"
+  },
+  {
+   "fieldname": "swayam_sevika",
+   "fieldtype": "Table",
+   "label": "Swayam Sevika",
+   "options": "Swayam Sevika Records"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-04 14:01:33.335178",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "Swayam Sevika",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "BDO & BDE",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
