@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{ss_code}-DEL{####}",
+ "creation": "2024-04-26 17:07:33.563528",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ss_code",
+  "column_break_hn3fn",
+  "request_by",
+  "request_by_empid",
+  "column_break_bx59l",
+  "rejected_by",
+  "rejected_by_empid"
+ ],
+ "fields": [
+  {
+   "fieldname": "ss_code",
+   "fieldtype": "Data",
+   "label": "SS Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_by",
+   "fieldtype": "Data",
+   "label": "Request By",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rejected_by",
+   "fieldtype": "Data",
+   "label": "Rejected By",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hn3fn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bx59l",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "request_by_empid",
+   "fieldtype": "Data",
+   "label": "Request By (EmpID)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rejected_by_empid",
+   "fieldtype": "Data",
+   "label": "Rejected By (EmpID)",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-05-10 11:44:50.711823",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "Rejected Records",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Team Leader - SMBG",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Team Leader - DDS",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "BDOs",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "BDEs",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,172 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:branch",
+ "creation": "2024-03-22 16:58:53.793999",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "branch",
+  "team_leader_dds_section",
+  "dds_employee_id",
+  "column_break_eywba",
+  "dds_employee_name",
+  "column_break_o6pdu",
+  "dds_designation",
+  "column_break_85tzr",
+  "dds_tl_mail",
+  "column_break_cacf5",
+  "dds_user",
+  "team_leader_smbg_section",
+  "smbg_employee_id",
+  "column_break_mdrq1",
+  "smbg_employee_name",
+  "column_break_yhkdj",
+  "smbg_designation",
+  "column_break_c05qd",
+  "smbg_tl_mail",
+  "column_break_bmm3q",
+  "smbg_user"
+ ],
+ "fields": [
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "unique": 1
+  },
+  {
+   "fieldname": "team_leader_dds_section",
+   "fieldtype": "Section Break",
+   "label": "Team Leader DDS"
+  },
+  {
+   "fieldname": "dds_employee_id",
+   "fieldtype": "Link",
+   "label": "Employee ID",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "dds_employee_id.employee_name",
+   "fieldname": "dds_employee_name",
+   "fieldtype": "Data",
+   "label": "DDS Employee Name"
+  },
+  {
+   "fetch_from": "dds_employee_id.designation",
+   "fieldname": "dds_designation",
+   "fieldtype": "Data",
+   "label": "DDS-Designation"
+  },
+  {
+   "fieldname": "team_leader_smbg_section",
+   "fieldtype": "Section Break",
+   "label": "Team Leader SMBG"
+  },
+  {
+   "fieldname": "smbg_employee_id",
+   "fieldtype": "Link",
+   "label": "Employee ID",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "smbg_employee_id.employee_name",
+   "fieldname": "smbg_employee_name",
+   "fieldtype": "Data",
+   "label": "SMBG Employee Name"
+  },
+  {
+   "fetch_from": "smbg_employee_id.designation",
+   "fieldname": "smbg_designation",
+   "fieldtype": "Data",
+   "label": "SMBG-Designation"
+  },
+  {
+   "fieldname": "column_break_eywba",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_o6pdu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mdrq1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_yhkdj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "smbg_employee_id.user_id",
+   "fieldname": "smbg_user",
+   "fieldtype": "Data",
+   "label": "SMBG User"
+  },
+  {
+   "fetch_from": "dds_employee_id.user_id",
+   "fieldname": "dds_user",
+   "fieldtype": "Data",
+   "label": "DDS User"
+  },
+  {
+   "fieldname": "column_break_85tzr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bmm3q",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "dds_employee_id.company_email",
+   "fieldname": "dds_tl_mail",
+   "fieldtype": "Data",
+   "label": "DDS-Mail",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_cacf5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_c05qd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "smbg_employee_id.company_email",
+   "fieldname": "smbg_tl_mail",
+   "fieldtype": "Data",
+   "label": "SMBG-Mail ",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-16 11:44:07.553853",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "TL and Branches",
+ "name_case": "Title Case",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

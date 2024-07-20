@@ -1,0 +1,31 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2024-01-08 17:36:46.916553",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Sahayog",
+ "modified": "2024-02-12 17:54:00.170065",
+ "modified_by": "Administrator",
+ "module": "Incentive Management",
+ "name": "Swayam Sevika Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT \n    employee_id AS `Employee ID`, \n    CONCAT(emp_first_name, ' ', emp_last_name) AS `Employee Name`, \n    designation AS `Designation`, \n    region AS `Region`, \n    branch AS `Branch`, \n    ss_code AS `SS Code`,  \n    full_name AS `Swayam Sevika Name`,\n    city AS `City`\nFROM \n    `tabSwayam Sevika Data`\nORDER BY\n    CAST(employee_id AS UNSIGNED) ASC;",
+ "ref_doctype": "Swayam Sevika Data",
+ "report_name": "Swayam Sevika Report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "MIS Admin"
+  },
+  {
+   "role": "MIS User"
+  }
+ ]
+}
