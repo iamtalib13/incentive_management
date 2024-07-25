@@ -120,17 +120,17 @@ frappe.ui.form.on("My Swayam Sevika", {
       var tlDDSBranch = frm.doc.branch;
       console.log("TL ki branch (DDS): " + tlDDSBranch);
     } else if (frappe.user.has_role("Team Leader - BOM")) {
-      var tlBOMBranch= frm.doc.branch;
+      var tlBOMBranch = frm.doc.branch;
       console.log("TL ki branch (BOM): " + tlBOMBranch);
-
     }
 
     // Add custom buttons based on user roles and document status
     if (!frm.is_new()) {
       // When form is not new
-      // Disable save button if status is "Approved" or "Rejected" or "Pending From TL" and user has "MIS User" role
+      // Disable save button if status is "Approved" or "Rejected" or "Pending From Approver" and user has "MIS User" role
       if (
-        (frm.doc.status === "Draft" || frm.doc.status === "Pending From TL") &&
+        (frm.doc.status === "Draft" ||
+          frm.doc.status === "Pending From Approver") &&
         (frappe.user.has_role("BDOs") ||
           frappe.user.has_role("BDEs") ||
           frappe.user.has_role("BD-others"))
@@ -144,16 +144,18 @@ frappe.ui.form.on("My Swayam Sevika", {
           frappe.user.has_role("BDEs") ||
           frappe.user.has_role("BD-others") ||
           frappe.user.has_role("Team Leader - SMBG") ||
-          frappe.user.has_role("Team Leader - DDS") || frappe.user.has_role("Team Leader - BOM"))
+          frappe.user.has_role("Team Leader - DDS") ||
+          frappe.user.has_role("Team Leader - BOM"))
       ) {
         frm.enable_form();
       }
 
       if (
         (frm.doc.status === "Rejected" ||
-          frm.doc.status === "Pending From TL") &&
+          frm.doc.status === "Pending From Approver") &&
         (frappe.user.has_role("Team Leader - SMBG") ||
-          frappe.user.has_role("Team Leader - DDS") || frappe.user.has_role("Team Leader - BOM"))
+          frappe.user.has_role("Team Leader - DDS") ||
+          frappe.user.has_role("Team Leader - BOM"))
       ) {
         frm.disable_save();
         frm.set_df_property("ss_code", "read_only", 1);
@@ -173,95 +175,101 @@ frappe.ui.form.on("My Swayam Sevika", {
           .add_custom_button(__("Send for Approval"), function () {
             let tl_user = "";
             let main_tl_mail = "";
-            if (frappe.user.has_role("BDEs")) 
-              {
+            if (frappe.user.has_role("BDEs")) {
               tl_user = frm.doc.dds_user_id;
               main_tl_mail = frm.doc.dds_mail;
               setTLFields(tl_user, main_tl_mail);
-            } 
-            else if (frappe.user.has_role("BDOs")) 
-              {
+            } else if (frappe.user.has_role("BDOs")) {
               tl_user = frm.doc.smbg_user_id;
               main_tl_mail = frm.doc.smbg_mail;
               setTLFields(tl_user, main_tl_mail);
-            } 
-            else if (frappe.user.has_role("BD-others")) {
+            } else if (frappe.user.has_role("BD-others")) {
               // Call the custom server-side API endpoint to get all BOMs for the branch
               frappe.confirm(
                 "<i>Do you want to send for Approval?</i>",
-                   () => 
-               {
-                     // action to perform if Yes is selected
-              frappe.call({
-                method: "incentive_management.incentive_management.doctype.my_swayam_sevika.my_swayam_sevika.get_all_bom_user_ids",
-                args: {
-                  branch: frm.doc.branch
+                () => {
+                  // action to perform if Yes is selected
+                  frappe.call({
+                    method:
+                      "incentive_management.incentive_management.doctype.my_swayam_sevika.my_swayam_sevika.get_all_bom_user_ids",
+                    args: {
+                      branch: frm.doc.branch,
+                    },
+                    callback: function (response) {
+                      if (
+                        response &&
+                        response.message &&
+                        response.message.length >= 0
+                      ) {
+                        let bomUsers = response.message;
+                        console.log(response.message);
+
+                        // // Set options for doc_received_by field
+                        // let options = bomUsers.map(bomUser => bomUser.user_id).join("\n");
+                        // frappe.meta.get_docfield(frm.doc.doctype, 'doc_received_by', frm.doc.name).options = options;
+                        // frm.refresh_field('doc_received_by');
+
+                        // Loop through each BOM and send/share the form
+                        bomUsers.forEach(function (bomUser) {
+                          let tl_user = bomUser.user_id;
+                          let main_tl_mail = bomUser.company_email;
+
+                          let userOptions = bomUsers
+                            .map((user) => user.user_id)
+                            .join("\n");
+                          frm.set_value("doc_received_by", userOptions);
+
+                          frappe.call({
+                            method: "frappe.share.add",
+                            freeze: true, // Set to true to freeze the UI
+                            freeze_message:
+                              "Internet Not Stable, Please Wait...",
+                            args: {
+                              doctype: frm.doctype,
+                              name: frm.docname,
+                              user: tl_user,
+                              read: 1,
+                              write: 1,
+                              submit: 0,
+                              share: 1,
+                              notify: 1,
+                              send_email: 0, // Set this to 0 to prevent sending email notifications
+                            },
+                            callback: function (response) {
+                              if (frm.doc.status === "Draft") {
+                                frm.set_value(
+                                  "status",
+                                  "Pending From Approver"
+                                );
+                                frm.set_value("active", true);
+                                frm.refresh_field("status");
+                                frm.save();
+                              }
+                            },
+                          });
+                        });
+                        //Display a message to the user
+                        frappe.show_alert({
+                          message: "Your Approval Request Sent Successfully ",
+                          indicator: "green",
+                        });
+
+                        // Optionally, perform additional actions after sharing with all BOMs
+                      } else {
+                        // Handle case where no matching Employee records are found
+                        console.log(
+                          "No matching Branch Operation Managers found for the branch."
+                        );
+                        // Optionally, you can notify the user or handle this case as per your application logic.
+                      }
+                    },
+                  });
                 },
-                callback: function(response) {
-                  if (response && response.message && response.message.length >= 0) {
-                    let bomUsers = response.message;
-                    console.log(response.message);
-
-                    // // Set options for doc_received_by field
-                    // let options = bomUsers.map(bomUser => bomUser.user_id).join("\n");
-                    // frappe.meta.get_docfield(frm.doc.doctype, 'doc_received_by', frm.doc.name).options = options;
-                    // frm.refresh_field('doc_received_by');
-
-                  
-                    // Loop through each BOM and send/share the form
-                    bomUsers.forEach(function(bomUser) {
-                      let tl_user = bomUser.user_id;
-                      let main_tl_mail = bomUser.company_email;
-
-                      let userOptions = bomUsers.map(user => user.user_id).join("\n");
-                      frm.set_value("doc_received_by",userOptions);
-
-                      frappe.call({
-                        method: "frappe.share.add",
-                        freeze: true, // Set to true to freeze the UI
-                        freeze_message: "Internet Not Stable, Please Wait...",
-                        args: {
-                          doctype: frm.doctype,
-                          name: frm.docname,
-                          user: tl_user,
-                          read: 1,
-                          write: 1,
-                          submit: 0,
-                          share: 1,
-                          notify: 1,
-                          send_email: 0, // Set this to 0 to prevent sending email notifications
-                        },
-                        callback: function (response) {
-                          if (frm.doc.status === "Draft") {
-                            frm.set_value("status", "Pending From TL");
-                            frm.set_value("active", true);
-                            frm.refresh_field("status");
-                            frm.save();
-                          }
-                        },
-                      });
-                    });
-                    //Display a message to the user
-                    frappe.show_alert({
-                      message: "Your Approval Request Sent Successfully ",
-                      indicator: "green",
-                    });
-            
-                    // Optionally, perform additional actions after sharing with all BOMs
-            
-                  } else {
-                    // Handle case where no matching Employee records are found
-                    console.log("No matching Branch Operation Managers found for the branch.");
-                    // Optionally, you can notify the user or handle this case as per your application logic.
-                  }
+                () => {
+                  // action to perform if No is selected
                 }
-              });
-            },
-            () => {
-              // action to perform if No is selected
+              );
             }
-          );
-            }            
             function setTLFields(tl_user, main_tl_mail) {
               // Set the fields on frm.doc
               frm.doc.main_tl_id = tl_user;
@@ -271,49 +279,49 @@ frappe.ui.form.on("My Swayam Sevika", {
               console.log("Main TL ID : " + frm.doc.main_tl_id);
               console.log("Main TL Mail ID : " + frm.doc.main_tl_mail);
 
-              sendForApproval(tl_user, main_tl_mail); 
+              sendForApproval(tl_user, main_tl_mail);
             }
-          function sendForApproval(tl_user, main_tl_mail) {
-            frappe.confirm(
-              "<i>Do you want to send for Approval?</i>",
-              () => {
-                // action to perform if Yes is selected
-                frappe.call({
-                  method: "frappe.share.add",
-                  freeze: true, // Set to true to freeze the UI
-                  freeze_message: "Internet Not Stable, Please Wait...",
-                  args: {
-                    doctype: frm.doctype,
-                    name: frm.docname,
-                    user: tl_user,
-                    read: 1,
-                    write: 1,
-                    submit: 0,
-                    share: 1,
-                    notify: 1,
-                    send_email: 0, // Set this to 0 to prevent sending email notifications
-                  },
+            function sendForApproval(tl_user, main_tl_mail) {
+              frappe.confirm(
+                "<i>Do you want to send for Approval?</i>",
+                () => {
+                  // action to perform if Yes is selected
+                  frappe.call({
+                    method: "frappe.share.add",
+                    freeze: true, // Set to true to freeze the UI
+                    freeze_message: "Internet Not Stable, Please Wait...",
+                    args: {
+                      doctype: frm.doctype,
+                      name: frm.docname,
+                      user: tl_user,
+                      read: 1,
+                      write: 1,
+                      submit: 0,
+                      share: 1,
+                      notify: 1,
+                      send_email: 0, // Set this to 0 to prevent sending email notifications
+                    },
 
-                  callback: function (response) {
-                    //Display a message to the user
-                    frappe.show_alert({
-                      message: "Your Approval Request Sent Successfully ",
-                      indicator: "green",
-                    });
-                    if (frm.doc.status === "Draft") {
-                      frm.set_value("status", "Pending From TL");
-                      frm.set_value("active", true);
-                      frm.refresh_field("status");
-                      frm.save();
-                    }
-                  },
-                });
-              },
-              () => {
-                // action to perform if No is selected
-              }
-            );
-          }
+                    callback: function (response) {
+                      //Display a message to the user
+                      frappe.show_alert({
+                        message: "Your Approval Request Sent Successfully ",
+                        indicator: "green",
+                      });
+                      if (frm.doc.status === "Draft") {
+                        frm.set_value("status", "Pending From Approver");
+                        frm.set_value("active", true);
+                        frm.refresh_field("status");
+                        frm.save();
+                      }
+                    },
+                  });
+                },
+                () => {
+                  // action to perform if No is selected
+                }
+              );
+            }
           })
           .css({
             "background-color": "#28a745", // Set green color
@@ -323,9 +331,9 @@ frappe.ui.form.on("My Swayam Sevika", {
         // Hide menu button
         frm.page.menu_btn_group.toggle(false);
       }
-      // Disable save button if status is "Pending From TL" and user has "BDO & BDE" role
+      // Disable save button if status is "Pending From Approver" and user has "BDO & BDE" role
       if (
-        (frm.doc.status === "Pending From TL" ||
+        (frm.doc.status === "Pending From Approver" ||
           frm.doc.status === "Approved") &&
         (frappe.user.has_role("BDEs") ||
           frappe.user.has_role("BDOs") ||
@@ -335,11 +343,12 @@ frappe.ui.form.on("My Swayam Sevika", {
         frm.set_df_property("ss_code", "read_only", 1);
       }
 
-      // Add custom buttons for "Approve" and "Reject" if status is "Pending From TL" and user has "Team leaders" role
+      // Add custom buttons for "Approve" and "Reject" if status is "Pending From Approver" and user has "Team leaders" role
       if (
-        frm.doc.status === "Pending From TL" &&
+        frm.doc.status === "Pending From Approver" &&
         (frappe.user.has_role("Team Leader - SMBG") ||
-          frappe.user.has_role("Team Leader - DDS") || frappe.user.has_role("Team Leader - BOM"))
+          frappe.user.has_role("Team Leader - DDS") ||
+          frappe.user.has_role("Team Leader - BOM"))
       ) {
         frm
           .add_custom_button(__("Approve"), function () {
@@ -434,7 +443,8 @@ frappe.ui.form.on("My Swayam Sevika", {
                                     frappe.user.has_role(
                                       "Team Leader - SMBG"
                                     ) ||
-                                    frappe.user.has_role("Team Leader - DDS") || frappe.user.has_role("Team Leader - BOM")
+                                    frappe.user.has_role("Team Leader - DDS") ||
+                                    frappe.user.has_role("Team Leader - BOM")
                                   ) {
                                     window.location.href =
                                       "/app/swayam-sevika-management";
