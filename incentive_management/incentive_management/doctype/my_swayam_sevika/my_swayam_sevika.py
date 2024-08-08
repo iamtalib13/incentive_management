@@ -53,55 +53,6 @@ def get_owner_full_name(owner):
     else:
         frappe.throw(_("Full name not found for user ID: {0}").format(owner))
 
-@frappe.whitelist()
-def delete_records_by_owner(user_id,employee_id):
-    # Fetch records owned by the user from the "My Swayam Sevika" doctype
-    records = frappe.get_list(
-        "My Swayam Sevika", 
-        filters={"owner": user_id},
-        fields=["ss_code", "full_name", "date_of_birth", "branch_code", 
-                "present_address", "city", "phone", "aadhar_number", "pan_number"]
-    )
-    
-    # Print fetched records for debugging
-    print("Fetched Records:", records)
-    
-    # If no records exist, return True without making any API calls
-    if not records:
-        return True
-    
-    try:
-        # Save the records data in another doctype (e.g., "Disabled Agent Data")
-        for record in records:
-            backup_record = frappe.new_doc("Disabled Agents SS Data")
-            backup_record.update({
-                "ss_code": record.get("ss_code"),
-                "full_name": record.get("full_name"),
-                "date_of_birth": record.get("date_of_birth"),
-                "branch_code": record.get("branch_code"),
-                "present_address": record.get("present_address"),
-                "city": record.get("city"),
-                "phone": record.get("phone"),
-                "aadhar_number": record.get("aadhar_number"),
-                "pan_number": record.get("pan_number"),
-                "previous_bdobde_empid": employee_id
-
-            })
-            backup_record.insert()
-            print("Inserted Backup Record:", backup_record.name)
-        
-        print("First Records inserted successfully.")
-       
-        # Delete records owned by the user
-        frappe.db.sql("DELETE FROM `tabMy Swayam Sevika` WHERE owner = %s", user_id)
-        frappe.db.commit()
-        print("Second Records deleted successfully.")
-        return True
-    except Exception as e:
-        # Print the actual error message for debugging
-        print("Error deleting records:", e)
-        frappe.log_error("Error deleting records: " + str(e))
-        return False
 
 @frappe.whitelist()
 def get_sevika_counts_for_bd():
@@ -119,24 +70,28 @@ def get_sevika_counts_for_bd():
     total_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s"
     approved_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Approved'"
     rejected_query = "SELECT COUNT(*) FROM `tabRejected Records` WHERE request_by_empid=%s"
+    drafted_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Draft'"
     pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Pending From Approver'"
     
     # Execute the queries
     total_count = frappe.db.sql(total_query, (user_id,), as_dict=False)
     approved_count = frappe.db.sql(approved_query, (user_id,), as_dict=False)
     rejected_count = frappe.db.sql(rejected_query, (user_id,), as_dict=False)
+    drafted_count = frappe.db.sql(drafted_query, (user_id,), as_dict=False)
     pending_from_tl_count = frappe.db.sql(pending_from_tl_query, (user_id,), as_dict=False)
     
     # Extract the counts from the results
     total_sevika_count = total_count[0][0] if total_count else 0
     approved_sevika_count = approved_count[0][0] if approved_count else 0
     rejected_sevika_count = rejected_count[0][0] if rejected_count else 0
+    drafted_sevika_count = drafted_count[0][0] if drafted_count else 0
     pending_from_tl_sevika_count = pending_from_tl_count[0][0] if pending_from_tl_count else 0
     
     return {
         'total_count': total_sevika_count,
         'approved_count': approved_sevika_count,
         'rejected_count': rejected_sevika_count,
+        'drafted_count':drafted_sevika_count,
         'pending_from_tl_count': pending_from_tl_sevika_count
     }
 

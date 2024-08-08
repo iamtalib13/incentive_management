@@ -17,12 +17,15 @@ frappe.ui.form.on("Agent Enable-Disable", {
               "This will <b style='color: red;'>DISABLE</b> this user, also <b style='color: red;'>DELETE</b> 'My Swayam Sevika' Records created by him.",
             function () {
               // Proceed with saving the document and delete associated records
-              frm.save();
-              deleteRecordsByOwner(frm.doc.user_id, frm.doc.employee_id); // Call deleteRecordsByOwner function with userId
+              console.log("User confirmed to disable the agent");
+              frm.save().then(() => {
+                deleteRecordsByOwner(frm.doc.user_id, frm.doc.employee_id); // Call deleteRecordsByOwner function with userId
+              });
             },
             function () {
               // Revert status to 'Active' if the user cancels
               frm.set_value("status", "Active");
+              console.log("User cancelled the disable action");
             }
           );
         }
@@ -33,16 +36,18 @@ frappe.ui.form.on("Agent Enable-Disable", {
 
 // Function to handle deletion of records by the user
 function deleteRecordsByOwner(userId, empId) {
+  console.log("Calling server-side function to delete records for user:", userId);
   // Call server-side function to delete records by owner
   frappe.call({
     method:
-      "incentive_management.incentive_management.doctype.my_swayam_sevika.my_swayam_sevika.delete_records_by_owner",
+      "incentive_management.incentive_management.doctype.agent_enable_disable.agent_enable_disable.delete_records_by_owner",
     args: {
       user_id: userId,
       employee_id: empId,
     },
     callback: function (response) {
-      if (response.message) {
+      console.log("Server response:", response);
+      if (response.message === true) {
         console.log("Deleted records successfully.");
         // Optionally do something after successful deletion
       } else {

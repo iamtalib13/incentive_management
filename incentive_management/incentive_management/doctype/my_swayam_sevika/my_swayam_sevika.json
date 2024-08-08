@@ -56,7 +56,9 @@
   "phone",
   "column_break_unago",
   "aadhar_number",
-  "pan_number"
+  "pan_number",
+  "section_break_ogpnc",
+  "send_for_approval"
  ],
  "fields": [
   {
@@ -173,7 +175,7 @@
   {
    "fetch_from": "employee_id.branch",
    "fieldname": "branch",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Branch",
    "options": "TL and Branches"
@@ -203,7 +205,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "Draft\nPending From Approver\nApproved\nRejected"
+   "options": "Draft\nPending From TL\nApproved\nRejected"
   },
   {
    "fieldname": "column_break_l8rfw",
@@ -352,12 +354,22 @@
    "fieldname": "doc_received_by",
    "fieldtype": "Text",
    "label": "Doc Received By"
+  },
+  {
+   "fieldname": "section_break_ogpnc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.status==\"Draft\"",
+   "fieldname": "send_for_approval",
+   "fieldtype": "Button",
+   "label": "SEND FOR APPROVAL"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-25 13:20:40.807186",
+ "modified": "2024-08-08 15:44:16.095968",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "My Swayam Sevika",
