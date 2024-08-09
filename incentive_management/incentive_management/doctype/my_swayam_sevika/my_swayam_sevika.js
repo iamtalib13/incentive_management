@@ -49,8 +49,18 @@ frappe.ui.form.on("My Swayam Sevika", {
   send_for_approval: function (frm) {
     // Call custom button function
     customSendForApproval(frm);
-},
+  },
   refresh: function (frm) {
+    const sendForApprovalButton = document.querySelector(
+      'button[data-fieldname="send_for_approval"]'
+    );
+
+    // Apply the styles to change the background color and text color
+    if (sendForApprovalButton) {
+      sendForApprovalButton.style.backgroundColor = "rgb(40, 167, 69)";
+      sendForApprovalButton.style.color = "rgb(255, 255, 255)";
+    }
+
     // add custom button only if form is not new
     if (frm.is_new()) {
       console.log("neww");
@@ -79,6 +89,9 @@ frappe.ui.form.on("My Swayam Sevika", {
             // Set emp_full_name field with employee's name
             frm.set_value("emp_full_name", employeeData.employee_name);
             frm.refresh_field("emp_full_name");
+
+            frm.set_value("employee_user_id", frappe.session.user);
+            frm.refresh_field("employee_user_id");
 
             frm.set_value("designation", employeeData.designation);
             frm.refresh_field("designation");
@@ -133,8 +146,7 @@ frappe.ui.form.on("My Swayam Sevika", {
       // When form is not new
       // Disable save button if status is "Approved" or "Rejected" or "Pending From TL" and user has "MIS User" role
       if (
-        (frm.doc.status === "Draft" ||
-          frm.doc.status === "Pending From TL") &&
+        (frm.doc.status === "Draft" || frm.doc.status === "Pending From TL") &&
         (frappe.user.has_role("BDOs") ||
           frappe.user.has_role("BDEs") ||
           frappe.user.has_role("BD-others"))
@@ -167,7 +179,6 @@ frappe.ui.form.on("My Swayam Sevika", {
         frm.refresh_field("ss_code");
       }
 
-
       // Check if the user has the appropriate role and the status is "Draft"
       if (
         (frappe.user.has_role("BDOs") ||
@@ -188,7 +199,7 @@ frappe.ui.form.on("My Swayam Sevika", {
         // Hide menu button
         frm.page.menu_btn_group.toggle(false);
       }
-      
+
       // Disable save button if status is "Pending From TL" and user has "BDO & BDE" role
       if (
         (frm.doc.status === "Pending From TL" ||
@@ -422,11 +433,7 @@ function customSendForApproval(frm) {
             branch: frm.doc.branch,
           },
           callback: function (response) {
-            if (
-              response &&
-              response.message &&
-              response.message.length >= 0
-            ) {
+            if (response && response.message && response.message.length >= 0) {
               let bomUsers = response.message;
               console.log(response.message);
 
@@ -448,8 +455,7 @@ function customSendForApproval(frm) {
                 frappe.call({
                   method: "frappe.share.add",
                   freeze: true, // Set to true to freeze the UI
-                  freeze_message:
-                    "Internet Not Stable, Please Wait...",
+                  freeze_message: "Internet Not Stable, Please Wait...",
                   args: {
                     doctype: frm.doctype,
                     name: frm.docname,
@@ -463,10 +469,7 @@ function customSendForApproval(frm) {
                   },
                   callback: function (response) {
                     if (frm.doc.status === "Draft") {
-                      frm.set_value(
-                        "status",
-                        "Pending From TL"
-                      );
+                      frm.set_value("status", "Pending From TL");
                       frm.set_value("active", true);
                       frm.refresh_field("status");
                       frm.save();

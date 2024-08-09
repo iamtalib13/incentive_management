@@ -9,6 +9,7 @@
  "field_order": [
   "employee_details_tab",
   "employee_id",
+  "employee_user_id",
   "emp_full_name",
   "designation",
   "emp_phone",
@@ -175,7 +176,7 @@
   {
    "fetch_from": "employee_id.branch",
    "fieldname": "branch",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Branch",
    "options": "TL and Branches"
@@ -364,12 +365,17 @@
    "fieldname": "send_for_approval",
    "fieldtype": "Button",
    "label": "SEND FOR APPROVAL"
+  },
+  {
+   "fieldname": "employee_user_id",
+   "fieldtype": "Data",
+   "label": "Employee User ID"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-08 15:44:16.095968",
+ "modified": "2024-08-09 16:02:45.674468",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "My Swayam Sevika",
