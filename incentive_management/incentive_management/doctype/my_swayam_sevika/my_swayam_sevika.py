@@ -110,7 +110,7 @@ def get_sevika_counts_for_tl():
     total_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE main_tl_id=%s"
     approved_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE main_tl_id=%s AND status='Approved'"
     rejected_query = "SELECT COUNT(*) FROM `tabRejected Records` WHERE rejected_by_empid=%s"
-    pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE main_tl_id=%s AND status='Pending From Approver'"
+    pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE main_tl_id=%s AND status='Pending From TL'"
 
     bom_total_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE doc_received_by LIKE %s"
     bom_total_params = "%%%s%%" % (user)  # The pattern to search for  
@@ -118,7 +118,7 @@ def get_sevika_counts_for_tl():
     bom_approved_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE doc_received_by LIKE %s AND status='Approved'" 
     bom_approved_params = "%%%s%%" % (user)  # Adjust as per your requirement   
 
-    bom_pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE doc_received_by LIKE %s AND status='Pending From Approver'"    
+    bom_pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE doc_received_by LIKE %s AND status='Pending From TL'"    
     bom_pending_from_tl_params = "%%%s%%" % (user)  # Adjust as per your requirement
 
     bom_rejected_query = "SELECT COUNT(*) FROM `tabRejected Records` WHERE rejected_by_empid=%s"
