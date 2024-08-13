@@ -71,7 +71,7 @@ def get_sevika_counts_for_bd():
     approved_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Approved'"
     rejected_query = "SELECT COUNT(*) FROM `tabRejected Records` WHERE request_by_empid=%s"
     drafted_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Draft'"
-    pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Pending From Approver'"
+    pending_from_tl_query = "SELECT COUNT(*) FROM `tabMy Swayam Sevika` WHERE employee_id=%s AND status='Pending From TL'"
     
     # Execute the queries
     total_count = frappe.db.sql(total_query, (user_id,), as_dict=False)
