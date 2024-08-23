@@ -10,6 +10,8 @@
   "section_break_bast",
   "ss_code",
   "column_break_evyp",
+  "ss_status",
+  "column_break_g1hkh",
   "section_break_byvv",
   "full_name",
   "branch_code",
@@ -119,11 +121,21 @@
    "fieldname": "branch_code",
    "fieldtype": "Data",
    "label": "Branch Code"
+  },
+  {
+   "fieldname": "ss_status",
+   "fieldtype": "Select",
+   "label": "SS Status",
+   "options": "\nClosed\nLive"
+  },
+  {
+   "fieldname": "column_break_g1hkh",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-17 12:34:25.464318",
+ "modified": "2024-08-23 11:20:19.487871",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "Swayam Sevika Data",
@@ -159,20 +171,12 @@
  "sort_order": "DESC",
  "states": [
   {
-   "color": "Orange",
-   "title": "Pending From MIS"
-  },
-  {
-   "color": "Blue",
-   "title": "Draft"
-  },
-  {
    "color": "Green",
-   "title": "Approved"
+   "title": "Live"
   },
   {
    "color": "Red",
-   "title": "Rejected"
+   "title": "Closed"
   }
  ]
 }

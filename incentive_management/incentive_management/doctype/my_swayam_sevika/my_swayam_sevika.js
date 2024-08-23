@@ -10,41 +10,46 @@ frappe.ui.form.on("My Swayam Sevika", {
     }
 
     // Check if ss_code is entered
-    if (!frm.doc.ss_code) {
-      frappe.msgprint("Please enter the SS Code.");
-      frappe.validated = false; // Prevent saving
-      return;
-    }
+    // if (!frm.doc.ss_code) {
+    //   frappe.msgprint("Please enter the SS Code.");
+    //   frappe.validated = false; // Prevent saving
+    //   return;
+    // }
+  },
+  ss_code: function (frm) {
+    selected_ss_code = frm.doc.ss_code;
+  },
 
-    // Check if ss_code exists in Swayam Sevika Data doctype
-    frappe.call({
-      method:
-        "incentive_management.incentive_management.doctype.my_swayam_sevika.my_swayam_sevika.fetch_sevika_data",
-      args: {
-        ss_code: frm.doc.ss_code,
-      },
-      callback: function (r) {
-        if (r.message) {
-          // If ss_code exists, populate the form fields
-          frm.doc.full_name = r.message.full_name;
-          frm.doc.date_of_birth = r.message.date_of_birth;
-          frm.doc.aadhar_number = r.message.aadhar_number;
-          frm.doc.pan_number = r.message.pan_number;
-          frm.doc.gender = r.message.gender;
-          frm.doc.phone = r.message.phone;
-          //frm.doc.highest_education = r.message.highest_education;
-          frm.doc.present_address = r.message.present_address;
-          frm.doc.city = r.message.city;
-          frm.doc.branch_code = r.message.branch_code;
-          // Refresh form fields
-          frm.refresh_fields();
-        } else {
-          // If ss_code doesn't exist, prevent saving
-          frappe.msgprint("Swayam Sevika with this code does not exist.");
-          frappe.validated = false; // Prevent saving
-        }
-      },
+  onload: function (frm) {
+    frm.set_query("ss_code", function () {
+      return {
+        filters: [["ss_status", "=", "Live"]],
+      };
     });
+  },
+  validate: function (frm) {
+    if (frm.doc.ss_code) {
+      // Access the ss_status field from the linked Swayam Sevika Data
+      let ss_status = frm.doc.ss_status;
+
+      if (ss_status === "Closed") {
+        frappe.msgprint({
+            title: __('Alert'),
+            message: __("This SS code is Closed, You can't access."),
+            indicator: 'red'
+        });
+
+        // Delay the refresh to allow the alert to be visible
+        setTimeout(function() {
+          window.location.reload();
+      }, 2000); // 2000 ms (2 seconds) delay to match the alert duration
+
+        frappe.validated = false; // Prevents the form from being saved
+        frm.set_value("ss_code", null);
+        frm.set_value("ss_status", null);
+        frm.refresh_fields();
+      }
+    }
   },
   send_for_approval: function (frm) {
     // Call custom button function
@@ -362,48 +367,7 @@ frappe.ui.form.on("My Swayam Sevika", {
       }
     }
   },
-  // Define the find button function
-  find: function (frm) {
-    // Fetch ss_code from the form
-    var ssCode = frm.doc.ss_code;
 
-    // Check if ss_code is entered
-    if (!ssCode) {
-      frappe.msgprint("Please enter the SS Code.");
-      return;
-    }
-
-    // Check if ss_code exists in Swayam Sevika Data doctype
-    frappe.call({
-      method:
-        "incentive_management.incentive_management.doctype.my_swayam_sevika.my_swayam_sevika.fetch_sevika_data",
-      args: {
-        ss_code: ssCode,
-      },
-      callback: function (r) {
-        if (r.message) {
-          console.log(r.message);
-          // If ss_code exists, populate the form fields
-          var sevikaData = r.message;
-
-          frm.set_value("full_name", sevikaData.full_name);
-          frm.set_value("date_of_birth", sevikaData.date_of_birth);
-          frm.set_value("aadhar_number", sevikaData.aadhar_number);
-          frm.set_value("pan_number", sevikaData.pan_number);
-          frm.set_value("gender", sevikaData.gender);
-          frm.set_value("phone", sevikaData.phone);
-          frm.set_value("present_address", sevikaData.present_address);
-          frm.set_value("city", sevikaData.city);
-          frm.set_value("branch_code", sevikaData.branch_code);
-          // Refresh form fields
-          frm.refresh_fields();
-        } else {
-          // If ss_code doesn't exist, show a message
-          frappe.msgprint("Swayam Sevika with this code does not exist.");
-        }
-      },
-    });
-  },
   admin_save: function (frm) {
     // Trigger save operation
     frm.save();

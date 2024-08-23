@@ -8,8 +8,10 @@ from frappe.model.document import Document
 import re
 
 class MySwayamSevika(Document):
-	pass
-
+    def validate(self):
+        pass
+        # if self.ss_status == "Closed":
+        #     frappe.throw("The SS is Closed and cannot be processed.")
 
 @frappe.whitelist()
 def fetch_sevika_data(ss_code):

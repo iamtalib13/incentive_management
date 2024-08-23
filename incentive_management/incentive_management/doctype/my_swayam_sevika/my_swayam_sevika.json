@@ -45,8 +45,9 @@
   "swayam_sevika_details_section",
   "active",
   "ss_code",
-  "find",
-  "section_break_zss5z",
+  "column_break_vffzb",
+  "ss_status",
+  "section_break_zss5",
   "full_name",
   "gender",
   "date_of_birth",
@@ -64,13 +65,15 @@
  "fields": [
   {
    "fieldname": "ss_code",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "SS Code",
+   "options": "Swayam Sevika Data",
    "reqd": 1,
    "unique": 1
   },
   {
+   "fetch_from": "ss_code.full_name",
    "fieldname": "full_name",
    "fieldtype": "Data",
    "label": "SS Full Name",
@@ -78,18 +81,21 @@
    "reqd": 1
   },
   {
+   "fetch_from": "ss_code.date_of_birth",
    "fieldname": "date_of_birth",
    "fieldtype": "Data",
    "label": "Date of Birth",
    "read_only": 1
   },
   {
+   "fetch_from": "ss_code.aadhar_number",
    "fieldname": "aadhar_number",
    "fieldtype": "Data",
    "label": "Aadhar Number",
    "read_only": 1
   },
   {
+   "fetch_from": "ss_code.pan_number",
    "fieldname": "pan_number",
    "fieldtype": "Data",
    "label": "PAN Number",
@@ -102,6 +108,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "ss_code.phone",
    "fieldname": "phone",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -109,12 +116,14 @@
    "read_only": 1
   },
   {
+   "fetch_from": "ss_code.present_address",
    "fieldname": "present_address",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Present Address",
    "read_only": 1
   },
   {
+   "fetch_from": "ss_code.city",
    "fieldname": "city",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -250,16 +259,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "section_break_zss5z",
-   "fieldtype": "Section Break"
-  },
-  {
-   "depends_on": "eval: doc.status == \"\" || doc.status == \"Draft\"",
-   "fieldname": "find",
-   "fieldtype": "Button",
-   "label": "Find"
-  },
-  {
    "fieldname": "district",
    "fieldtype": "Data",
    "label": "District",
@@ -316,6 +315,7 @@
    "label": "SMBG TL Mail"
   },
   {
+   "fetch_from": "ss_code.branch_code",
    "fieldname": "branch_code",
    "fieldtype": "Data",
    "label": "Branch Code",
@@ -361,7 +361,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "depends_on": "eval:doc.status==\"Draft\"",
+   "depends_on": "eval:doc.status==\"Draft\" ",
    "fieldname": "send_for_approval",
    "fieldtype": "Button",
    "label": "SEND FOR APPROVAL"
@@ -370,12 +370,27 @@
    "fieldname": "employee_user_id",
    "fieldtype": "Data",
    "label": "Employee User ID"
+  },
+  {
+   "fetch_from": "ss_code.ss_status",
+   "fieldname": "ss_status",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "SS Status"
+  },
+  {
+   "fieldname": "column_break_vffzb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_zss5",
+   "fieldtype": "Section Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-09 16:02:45.674468",
+ "modified": "2024-08-23 16:32:12.728029",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "My Swayam Sevika",
