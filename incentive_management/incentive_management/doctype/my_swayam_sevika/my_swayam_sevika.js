@@ -21,36 +21,54 @@ frappe.ui.form.on("My Swayam Sevika", {
   },
 
   onload: function (frm) {
+    // Set query to only show SS codes with a 'Live' status
     frm.set_query("ss_code", function () {
-      return {
-        filters: [["ss_status", "=", "Live"]],
-      };
+        return {
+            filters: [["ss_status", "=", "Live"]],
+        };
     });
-  },
-  validate: function (frm) {
+},
+validate: function (frm) {
     if (frm.doc.ss_code) {
-      // Access the ss_status field from the linked Swayam Sevika Data
-      let ss_status = frm.doc.ss_status;
+        // Access the ss_status field from the linked Swayam Sevika Data
+        let ss_status = frm.doc.ss_status;
 
-      if (ss_status === "Closed") {
-        frappe.msgprint({
-            title: __('Alert'),
-            message: __("This SS code is Closed, You can't access."),
-            indicator: 'red'
-        });
+        if (ss_status === "Closed") {
+            // Display a message alerting the user that the SS code is closed
+            frappe.msgprint({
+                title: __('Access Denied'),
+                message: __("This SS code is Closed and cannot be accessed."),
+                indicator: 'red'
+            });
 
-        // Delay the refresh to allow the alert to be visible
-        setTimeout(function() {
-          window.location.reload();
-      }, 2000); // 2000 ms (2 seconds) delay to match the alert duration
+            // Prevent the form from being saved
+            frappe.validated = false;
+            // Clear the ss_code and ss_status fields
+            frm.set_value("ss_code", null);
+            frm.set_value("ss_status", null);
+            frm.set_value("full_name", null);
+            frm.set_value("present_address", null);
+            frm.set_value("aadhar_number", null);
+            frm.set_value("date_of_birth", null);
+            frm.set_value("city", null);
+            frm.set_value("pan_number", null);
+            frm.set_value("branch_code", null);
+            frm.set_value("phone", null);
 
-        frappe.validated = false; // Prevents the form from being saved
-        frm.set_value("ss_code", null);
-        frm.set_value("ss_status", null);
-        frm.refresh_fields();
-      }
+
+            // Refresh the fields to reflect the cleared values
+            frm.refresh_fields();
+
+            // Log the error for debugging purposes
+            console.warn(`Attempt to save a Closed SS code: ${frm.doc.ss_code}`);
+
+            // Delay the page reload to ensure the alert is visible
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000); // 2-second delay to match the alert duration
+        }
     }
-  },
+},
   send_for_approval: function (frm) {
     // Call custom button function
     customSendForApproval(frm);
