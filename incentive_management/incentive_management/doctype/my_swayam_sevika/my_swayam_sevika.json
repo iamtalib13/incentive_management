@@ -33,6 +33,7 @@
   "bom_mail",
   "column_break_g57ze",
   "main_tl_id",
+  "main_tl_name",
   "main_tl_mail",
   "doc_received_by",
   "section_break_2h4jv",
@@ -385,12 +386,17 @@
   {
    "fieldname": "section_break_zss5",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "main_tl_name",
+   "fieldtype": "Data",
+   "label": "Main TL Name"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-23 16:32:12.728029",
+ "modified": "2024-09-24 12:44:58.104416",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "My Swayam Sevika",

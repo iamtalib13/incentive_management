@@ -28,10 +28,13 @@ class TLandBranches(Document):
                         # Determine the main_tl based on the user's roles
                         if 'BDEs' in user_roles:
                             main_tl = self.dds_user
+                            main_tl_name = self.dds_employee_name  # Assuming you have this field in the current document
                         elif 'BDOs' in user_roles:
                             main_tl = self.smbg_user
+                            main_tl_name = self.smbg_employee_name  # Assuming you have this field in the current document
                         else:
                             main_tl = None  # Handle the case where the role doesn't match
+                            main_tl_name = None  # Also set main_tl_name to None if no matching role
 
                         # Update fields in "My Swayam Sevika"
                         frappe.db.set_value("My Swayam Sevika", record['name'], "dds_tl", self.dds_employee_id, update_modified=False)
@@ -39,9 +42,12 @@ class TLandBranches(Document):
                         frappe.db.set_value("My Swayam Sevika", record['name'], "smbg_tl", self.smbg_employee_id, update_modified=False)
                         frappe.db.set_value("My Swayam Sevika", record['name'], "smbg_user_id", self.smbg_user, update_modified=False)
 
-                        # Update main_tl only if it was set
+                        # Update main_tl and main_tl_name only if they were set
                         if main_tl:
                             frappe.db.set_value("My Swayam Sevika", record['name'], "main_tl_id", main_tl, update_modified=False)
+                        if main_tl_name:
+                            frappe.db.set_value("My Swayam Sevika", record['name'], "main_tl_name", main_tl_name, update_modified=False)
+
 
                 frappe.db.commit()
                 frappe.msgprint("Branch updated in My Swayam Sevika.")

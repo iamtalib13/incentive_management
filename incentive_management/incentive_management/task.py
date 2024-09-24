@@ -31,17 +31,13 @@ def update_district():
         except Exception as e:
             print(f"Error updating record {id}: {e}")
 
-
-import frappe
-import frappe
-
 def update_my_swayam_sevika_from_tl_and_branches():
     try:
         # Fetch all records from "TL and Branches"
         tl_and_branches_records = frappe.get_all(
             "TL and Branches",
             filters={},
-            fields=["name", "branch", "dds_employee_id", "smbg_employee_id", "dds_user", "smbg_user"]
+            fields=["name", "branch", "dds_employee_id", "smbg_employee_id", "dds_user", "smbg_user", "dds_employee_name", "smbg_employee_name"]
         )
 
         updated_records_count = 0  # Initialize counter for updated records
@@ -65,8 +61,10 @@ def update_my_swayam_sevika_from_tl_and_branches():
                     # Determine the main_tl based on the user's roles
                     if 'BDEs' in user_roles:
                         main_tl = tl_record['dds_user']
+                        main_tl_name = tl_record['dds_employee_name']
                     elif 'BDOs' in user_roles:
                         main_tl = tl_record['smbg_user']
+                        main_tl_name = tl_record['smbg_employee_name']
                     else:
                         main_tl = None  # Handle the case where the role doesn't match
 
@@ -76,12 +74,12 @@ def update_my_swayam_sevika_from_tl_and_branches():
                         "dds_user_id": tl_record['dds_user'],
                         "smbg_tl": tl_record['smbg_employee_id'],
                         "smbg_user_id": tl_record['smbg_user'],
-                        "main_tl_id": main_tl if main_tl else None
+                        "main_tl_id": main_tl,
+                        "main_tl_name": main_tl_name  # Add main_tl_name to the update data
                     }
 
                     # Update the current record in "My Swayam Sevika"
-                    for field, value in swayam_update_data.items():
-                        frappe.db.set_value("My Swayam Sevika", swayam_record['name'], field, value, update_modified=False)
+                    frappe.db.set_value("My Swayam Sevika", swayam_record['name'], swayam_update_data, update_modified=False)
 
                     updated_records_count += 1  # Increment counter for each updated record
 
@@ -90,11 +88,12 @@ def update_my_swayam_sevika_from_tl_and_branches():
 
                 except Exception as e:
                     # Handle errors for individual records
-                    frappe.log_error(f"Error updating record {swayam_record['name']}: {e}", "Update My Swayam Sevika")
+                    frappe.log_error(f"Error updating record {swayam_record['name']} in TL record {tl_record['name']}: {e}", "Update My Swayam Sevika")
                     print(f"Error updating record {swayam_record['name']}: {e}")
 
         # Commit the changes
         frappe.db.commit()
+
         # Print the total number of updated records
         print(f"Total records updated: {updated_records_count}")
 

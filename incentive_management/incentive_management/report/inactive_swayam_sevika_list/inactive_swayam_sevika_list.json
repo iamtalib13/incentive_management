@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "Sahayog",
- "modified": "2024-02-28 16:01:30.851162",
+ "modified": "2024-09-20 11:24:15.350263",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "Inactive Swayam Sevika List",
@@ -29,6 +29,9 @@
   },
   {
    "role": "MIS Admin"
+  },
+  {
+   "role": "CTO"
   }
  ]
 }
