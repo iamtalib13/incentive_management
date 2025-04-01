@@ -34,6 +34,7 @@
   {
    "fieldname": "branch",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "label": "Branch",
    "options": "Branch",
    "unique": 1
@@ -46,7 +47,8 @@
   {
    "fieldname": "dds_employee_id",
    "fieldtype": "Link",
-   "label": "Employee ID",
+   "ignore_user_permissions": 1,
+   "label": "DDS Employee ID",
    "options": "Employee"
   },
   {
@@ -69,7 +71,8 @@
   {
    "fieldname": "smbg_employee_id",
    "fieldtype": "Link",
-   "label": "Employee ID",
+   "ignore_user_permissions": 1,
+   "label": "SMBG Employee ID",
    "options": "Employee"
   },
   {
@@ -145,7 +148,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-16 11:44:07.553853",
+ "modified": "2024-11-28 15:17:20.140827",
  "modified_by": "Administrator",
  "module": "Incentive Management",
  "name": "TL and Branches",
@@ -162,6 +165,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MIS User",
    "share": 1,
    "write": 1
   }
